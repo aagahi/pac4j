@@ -26,7 +26,8 @@ org.pac4j.saml.exceptions.SamlException: Authentication issue instant is too old
 
 There are two possibilities how to make the values equal:
 - Change the value in ADFS management console in the trust properties dialog.
-- Change the value on pac4j side.
+- Change the value on pac4j side using:
+  client.setMaximumAuthenticationLifetime(28800);
 
 
 3. Java Cryptography Extension (JCE) Unlimited Strength Jurisdiction Policy Files
@@ -41,3 +42,21 @@ ERROR [org.opensaml.xml.encryption.Decrypter] - <Failed to decrypt EncryptedData
 ERROR [org.opensaml.saml2.encryption.Decrypter] - <SAML Decrypter encountered an error decrypting element content>
 
 Java Cryptography Extension (JCE) Unlimited Strength Jurisdiction Policy Files can be downloaded from Oracle's Java Download site.
+
+4. Remove XMLSec from PAC4J dependency
+---------------------------------------------------------------------------------
+
+PAC4J 1.6.0 pull XMLSec 1.3.0 from its dependencies, meanwhile OpenSAML pulls version 1.4.4.
+Update your pom.xml file and remove the xml
+
+    <dependency>
+      <groupId>org.pac4j</groupId>
+      <artifactId>pac4j-saml</artifactId>
+      <version>1.6.0</version>
+        <exclusions>
+            <exclusion>  <!-- declare the exclusion here -->
+                <groupId>xml-security</groupId>
+                <artifactId>xmlsec</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
